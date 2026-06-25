@@ -14,6 +14,10 @@ interface ListingCardProps {
   onRequestInfo?: () => void;
 }
 
+
+
+
+
 export default function ListingCard({
   location,
   title,
