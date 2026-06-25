@@ -1,0 +1,86 @@
+﻿@import "tailwindcss";
+
+@theme {
+  --color-gold: #C9A84C;
+  --color-gold-light: #E5C97A;
+  --color-dark: #0D0D0D;
+  --color-card: #1A1A1A;
+  --color-border: #2A2A2A;
+  --font-heading: var(--font-playfair);
+  --font-body: var(--font-inter);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #050d1a;
+  color: #FFFFFF;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-heading {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+/* Signature canvas cursor */
+canvas {
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* Custom scrollbar */
+* {
+  scrollbar-color: #C9A84C #0a1628;
+  scrollbar-width: thin;
+}
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a1628;
+}
+::-webkit-scrollbar-thumb {
+  background: #C9A84C;
+  border-radius: 3px;
+}
+
+/* Gold gradient text */
+.text-gradient {
+  background: linear-gradient(135deg, #C9A84C, #E5C97A, #C9A84C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated border */
+@keyframes borderGlow {
+  0%, 100% { border-color: #C9A84C; box-shadow: 0 0 10px rgba(201, 168, 76, 0.3); }
+  50% { border-color: #E5C97A; box-shadow: 0 0 20px rgba(201, 168, 76, 0.6); }
+}
+
+.border-glow {
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
+/* WhatsApp pulse */
+@keyframes pulse-wa {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+}
+
+.pulse-wa {
+  animation: pulse-wa 2s ease-in-out infinite;
+}
+
+/* Progress bar transition */
+.progress-fill {
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
