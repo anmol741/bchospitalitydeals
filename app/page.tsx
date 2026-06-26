@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CountryCodeSelect from "@/components/CountryCodeSelect";
 import ListingCard from "@/components/ListingCard";
+import { submitToCRM } from "@/lib/submitToCRM";
 type ContactFormParams = {
   name: string; email: string; countryCode: string; phone: string;
   property: string; buyerProfile: string; budget: string;
@@ -349,35 +350,20 @@ export default function HomePage() {
       return;
     }
     setSubmitting(true);
-    try {
-      await fetch("https://admin.goeasyai.ca/api/automations/6a3c38944792f/execute", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          api_token: "a98af636848d6ab8cc8ca2d19541e47b",
-          contact_name: fd.name,
-          first_name: fd.name.split(" ")[0],
-          last_name: fd.name.split(" ").slice(1).join(" "),
-          email: fd.email,
-          contact_email: fd.email,
-          phone: `${fd.countryCode} ${fd.phone}`,
-          contact_phone: `${fd.countryCode} ${fd.phone}`,
-          contact_source: "BC Hospitality Deals Website",
-          which_p_wshrbo: fd.property,
-          buyer_profile_: fd.buyerProfile,
-          purchase_budget_: fd.budget,
-          when_ar_kjvtin: fd.timeline,
-          are_you_pecjxv: fd.ndaComfort,
-          additio_qhsdeb: fd.details,
-        }),
-      });
-      setSubmitted(true);
-    } catch (err) {
-      console.error("CRM error:", err);
-      setSubmitted(true);
-    } finally {
-      setSubmitting(false);
-    }
+    submitToCRM({
+      contact_name: fd.name,
+      contact_email: fd.email,
+      contact_phone: fd.countryCode + fd.phone,
+      contact_source: 'BC Hospitality Deals Website',
+      'which_p_wshrbo': fd.property,
+      'buyer_profile__ajl': fd.buyerProfile,
+      'purchase_budget__tsm': fd.budget,
+      'when_ar_jlvatx': fd.timeline,
+      'are_you_qnylji': fd.ndaComfort,
+      'additio_ewnbhy': fd.details,
+    });
+    setSubmitted(true);
+    setSubmitting(false);
   };
 
   const inputClass = (key: keyof FormErrors) =>
