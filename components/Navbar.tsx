@@ -58,6 +58,12 @@ export default function Navbar() {
               </svg>
               778-896-9552
             </a>
+            <Link
+              href="/blog"
+              className="text-white/70 hover:text-[#C9A84C] transition-colors font-medium text-sm"
+            >
+              Blog
+            </Link>
             <button
               onClick={scrollToForm}
               className="px-5 py-2.5 bg-[#C9A84C] hover:bg-[#E5C97A] text-[#0D0D0D] font-semibold rounded text-sm transition-all duration-200 hover:scale-105 active:scale-95"
@@ -102,6 +108,13 @@ export default function Navbar() {
             style={{ background: "rgba(5,13,26,0.98)", borderTop: "1px solid rgba(201,168,76,0.25)" }}
           >
             <div className="px-4 py-4 flex flex-col gap-3">
+              <Link
+                href="/blog"
+                className="w-full px-5 py-3 border border-[#C9A84C]/30 text-white/70 font-semibold rounded text-sm text-center transition-all hover:bg-[#C9A84C]/10 hover:text-[#C9A84C]"
+                onClick={() => setMenuOpen(false)}
+              >
+                Blog
+              </Link>
               <button
                 onClick={scrollToForm}
                 className="w-full px-5 py-3 bg-[#C9A84C] hover:bg-[#E5C97A] text-[#0D0D0D] font-semibold rounded text-sm transition-all"
