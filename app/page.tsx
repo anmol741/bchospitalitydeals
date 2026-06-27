@@ -366,6 +366,7 @@ export default function HomePage() {
     setSubmitting(false);
   };
 
+  
   const inputClass = (key: keyof FormErrors) =>
     errors[key] ? INPUT_ERROR : INPUT_NORMAL;
 

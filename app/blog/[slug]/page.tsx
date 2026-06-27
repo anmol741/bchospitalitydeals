@@ -4,6 +4,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
 
+export async function generateStaticParams() {
+  return [];
+}
+
+export const dynamic = 'force-dynamic';
+
 function formatDate(dateStr: string | null) {
   if (!dateStr) return "";
   return new Date(dateStr).toLocaleDateString("en-CA", {
