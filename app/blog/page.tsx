@@ -1,12 +1,11 @@
-"use client";
-
-export const dynamic = 'force-dynamic';
-
-import { useEffect, useState } from "react";
+import { unstable_cache } from "next/cache";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BlogImage from "@/components/BlogImage";
 import { supabase, type Post } from "@/lib/supabase";
+
+export const revalidate = 60;
 
 const BADGE_COLORS: Record<string, string> = {
   "Market Updates": "#1a3a6b",
@@ -26,21 +25,21 @@ function formatDate(dateStr: string | null) {
   });
 }
 
-export default function BlogPage() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    supabase
+const getPublishedPosts = unstable_cache(
+  async () => {
+    const { data } = await supabase
       .from("posts")
       .select("*")
       .eq("status", "published")
-      .order("published_at", { ascending: false })
-      .then(({ data }) => {
-        setPosts(data ?? []);
-        setLoading(false);
-      });
-  }, []);
+      .order("published_at", { ascending: false });
+    return data ?? [];
+  },
+  ["published-posts"],
+  { revalidate: 60, tags: ["posts"] }
+);
+
+export default async function BlogPage() {
+  const posts: Post[] = await getPublishedPosts();
 
   return (
     <>
@@ -71,14 +70,7 @@ export default function BlogPage() {
 
         {/* Posts grid */}
         <section className="py-16 px-4 max-w-7xl mx-auto">
-          {loading ? (
-            <div className="flex justify-center py-20">
-              <svg className="w-8 h-8 animate-spin" style={{ color: "#C9A84C" }} fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
-            </div>
-          ) : posts.length === 0 ? (
+          {posts.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-lg" style={{ color: "#94a3b8" }}>No posts yet. Check back soon.</p>
             </div>
@@ -95,11 +87,7 @@ export default function BlogPage() {
                 >
                   {/* Image */}
                   {post.featured_image ? (
-                    <img
-                      src={post.featured_image}
-                      alt={post.title}
-                      className="w-full h-48 object-cover"
-                    />
+                    <BlogImage src={post.featured_image} alt={post.title} />
                   ) : (
                     <div
                       className="w-full h-48 flex items-center justify-center"

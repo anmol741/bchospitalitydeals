@@ -4,11 +4,15 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
 
-export async function generateStaticParams() {
-  return [];
-}
+export const revalidate = 60;
 
-export const dynamic = 'force-dynamic';
+export async function generateStaticParams() {
+  const { data } = await supabase
+    .from("posts")
+    .select("slug")
+    .eq("status", "published");
+  return (data ?? []).map((post) => ({ slug: post.slug }));
+}
 
 function formatDate(dateStr: string | null) {
   if (!dateStr) return "";

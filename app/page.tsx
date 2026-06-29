@@ -1,12 +1,15 @@
 ﻿"use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
 import { motion, useInView, animate, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CountryCodeSelect from "@/components/CountryCodeSelect";
 import ListingCard from "@/components/ListingCard";
 import { submitToCRM } from "@/lib/submitToCRM";
+
+const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
+const FAQSection = lazy(() => import("@/components/FAQSection"));
 type ContactFormParams = {
   name: string; email: string; countryCode: string; phone: string;
   property: string; buyerProfile: string; budget: string;
@@ -192,79 +195,6 @@ function FieldError({ msg }: { msg?: string }) {
 
 type FormErrors = Partial<Record<keyof ContactFormParams | "privacy", string>>;
 
-const FAQ_ITEMS = [
-  {
-    q: "Why is the business name and location kept confidential?",
-    a: "Sellers require confidentiality to protect ongoing operations. Disclosing that a business is for sale can unsettle staff, alarm customers, and affect supplier relationships. Once a mutual NDA is in place, full details including address and business name are provided.",
-  },
-  {
-    q: "Why do I need to sign a Confidentiality Agreement (NDA)?",
-    a: "The NDA protects the seller's sensitive business information — financials, lease terms, staff details, and customer data. It is a standard part of any commercial business sale and ensures that only serious, qualified buyers receive private information.",
-  },
-  {
-    q: "How do I receive financial statements and business details?",
-    a: "After you submit your inquiry and sign the NDA, CJ Kalra will provide you with a Confidential Business Review (CBR) package containing financials, lease summaries, sales history, and other due diligence materials relevant to your selected listing.",
-  },
-  {
-    q: "Can these businesses support immigration or visa pathways?",
-    a: "Several of these listings may qualify for Canadian business immigration programs. CJ works with RCIC-licensed consultants who can advise on BCPNP Entrepreneur stream and federal self-employed pathways. Mention your immigration goals in the inquiry form.",
-  },
-  {
-    q: "How quickly can I receive information after submitting my inquiry?",
-    a: "You will typically receive a response within 1 business day. After the NDA is signed, the Confidential Business Review is usually shared within 24–48 hours depending on availability.",
-  },
-];
-
-function FaqSection() {
-  const [open, setOpen] = useState<number | null>(null);
-  return (
-    <section className="py-20 px-4" style={{ background: "#050d1a" }}>
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#C9A84C" }}>COMMON QUESTIONS</p>
-          <div className="w-12 h-px mx-auto mb-4" style={{ background: "#C9A84C" }} />
-          <h2 className="text-4xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>Frequently Asked Questions</h2>
-        </div>
-        <div className="space-y-0">
-          {FAQ_ITEMS.map((item, i) => (
-            <div key={i} style={{ borderBottom: "1px solid rgba(201,168,76,0.15)" }}>
-              <button
-                className="w-full flex items-center justify-between gap-4 py-5 text-left transition-colors"
-                onClick={() => setOpen(open === i ? null : i)}
-              >
-                <span className="font-medium text-white text-sm md:text-base">{item.q}</span>
-                <svg
-                  className="w-5 h-5 flex-shrink-0 transition-transform duration-300"
-                  style={{
-                    color: "#C9A84C",
-                    transform: open === i ? "rotate(90deg)" : "rotate(0deg)",
-                  }}
-                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-              <AnimatePresence initial={false}>
-                {open === i && (
-                  <motion.div
-                    key="answer"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25, ease: "easeInOut" }}
-                    className="overflow-hidden"
-                  >
-                    <p className="pb-5 text-sm leading-relaxed" style={{ color: "#94a3b8" }}>{item.a}</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 const HERO_WORDS = ["Exclusive", "|", "Confidential", "|", "Business", "Opportunities"];
 
@@ -1094,66 +1024,14 @@ export default function HomePage() {
         </section>
 
         {/* ── Testimonials ── */}
-        <section className="py-20 px-4" style={{ background: "#050d1a" }}>
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#C9A84C" }}>CLIENT EXPERIENCES</p>
-              <div className="w-12 h-px mx-auto mb-4" style={{ background: "#C9A84C" }} />
-              <h2 className="text-4xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>What Buyers Are Saying</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                {
-                  body: "CJ's approach to confidentiality gave us complete confidence throughout the process. We received detailed financials within days of signing the NDA, and the transaction closed without a single issue. Exceptional commercial representation.",
-                  initials: "RS",
-                  name: "Rajinder S.",
-                  sub: "Verified Buyer — BC",
-                },
-                {
-                  body: "As an international investor exploring opportunities in BC, CJ provided clarity, professionalism, and access to deals I simply could not find elsewhere. His network and discretion are unmatched.",
-                  initials: "AK",
-                  name: "Avneet Kaur",
-                  sub: "Business Investor — Surrey, BC",
-                },
-              ].map((t) => (
-                <div
-                  key={t.initials}
-                  className="rounded-xl p-7 flex flex-col gap-4"
-                  style={{
-                    background: "linear-gradient(145deg, #0a1628, #0d1f3c)",
-                    border: "1px solid rgba(201,168,76,0.15)",
-                    borderTop: "2px solid #C9A84C",
-                  }}
-                >
-                  <span className="text-5xl leading-none text-[#C9A84C] opacity-40 font-serif">&ldquo;</span>
-                  <p className="text-sm leading-relaxed flex-1" style={{ color: "#e8dfc8" }}>{t.body}</p>
-                  <div className="flex items-center gap-1 text-[#C9A84C]">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <svg key={i} className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
-                      style={{ background: "rgba(201,168,76,0.2)", color: "#C9A84C", border: "1px solid rgba(201,168,76,0.4)" }}
-                    >
-                      {t.initials}
-                    </div>
-                    <div>
-                      <p className="text-white font-semibold text-sm">{t.name}</p>
-                      <p className="text-xs" style={{ color: "#94a3b8" }}>{t.sub}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <Suspense fallback={<div style={{ height: "400px", background: "#050d1a" }} />}>
+          <TestimonialsSection />
+        </Suspense>
 
         {/* ── FAQ ── */}
-        <FaqSection />
+        <Suspense fallback={<div style={{ height: "400px", background: "#050d1a" }} />}>
+          <FAQSection />
+        </Suspense>
       </main>
 
       <Footer />
