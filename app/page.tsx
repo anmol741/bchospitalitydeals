@@ -1,15 +1,16 @@
 ﻿"use client";
 
-import { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
+export const dynamic = 'force-dynamic';
+
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, useInView, animate, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CountryCodeSelect from "@/components/CountryCodeSelect";
 import ListingCard from "@/components/ListingCard";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import FAQSection from "@/components/FAQSection";
 import { submitToCRM } from "@/lib/submitToCRM";
-
-const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
-const FAQSection = lazy(() => import("@/components/FAQSection"));
 type ContactFormParams = {
   name: string; email: string; countryCode: string; phone: string;
   property: string; buyerProfile: string; budget: string;
@@ -322,7 +323,7 @@ export default function HomePage() {
 
           <div className="relative z-10 max-w-5xl mx-auto px-4 text-center pt-24 pb-16">
             <motion.div
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: 0.2 }}
               className="inline-flex items-center gap-2 px-4 py-2 border border-[#C9A84C]/30 rounded-full text-[#C9A84C] text-xs uppercase tracking-widest font-medium mb-8"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] inline-block animate-pulse" />
@@ -334,7 +335,8 @@ export default function HomePage() {
                 <motion.span
                   key={i}
                   initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.6, delay: 0.4 + i * 0.1, ease: "easeOut" }}
                   className={`inline-block mr-3 ${word === "|" ? "text-[#C9A84C]/40 text-4xl md:text-5xl align-middle" : i % 2 === 0 || word === "Opportunities" ? "text-gradient" : "text-white"}`}
                 >
@@ -344,7 +346,7 @@ export default function HomePage() {
             </h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 1.2 }}
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: 1.2 }}
               className="text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
               style={{ color: "#e8dfc8" }}
             >
@@ -353,7 +355,7 @@ export default function HomePage() {
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 1.4 }}
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: 1.4 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
               <button
@@ -375,7 +377,7 @@ export default function HomePage() {
           </div>
 
           <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2, duration: 0.6 }}
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, margin: "-100px" }} transition={{ delay: 2, duration: 0.6 }}
             className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             style={{ color: "#94a3b8" }}
           >
@@ -1024,14 +1026,10 @@ export default function HomePage() {
         </section>
 
         {/* ── Testimonials ── */}
-        <Suspense fallback={<div style={{ height: "400px", background: "#050d1a" }} />}>
-          <TestimonialsSection />
-        </Suspense>
+        <TestimonialsSection />
 
         {/* ── FAQ ── */}
-        <Suspense fallback={<div style={{ height: "400px", background: "#050d1a" }} />}>
-          <FAQSection />
-        </Suspense>
+        <FAQSection />
       </main>
 
       <Footer />

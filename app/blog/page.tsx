@@ -1,11 +1,10 @@
-import { unstable_cache } from "next/cache";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import BlogImage from "@/components/BlogImage";
+import BlogCardImage from "@/components/BlogCardImage";
 import { supabase, type Post } from "@/lib/supabase";
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 const BADGE_COLORS: Record<string, string> = {
   "Market Updates": "#1a3a6b",
@@ -25,21 +24,13 @@ function formatDate(dateStr: string | null) {
   });
 }
 
-const getPublishedPosts = unstable_cache(
-  async () => {
-    const { data } = await supabase
-      .from("posts")
-      .select("*")
-      .eq("status", "published")
-      .order("published_at", { ascending: false });
-    return data ?? [];
-  },
-  ["published-posts"],
-  { revalidate: 60, tags: ["posts"] }
-);
-
 export default async function BlogPage() {
-  const posts: Post[] = await getPublishedPosts();
+  const { data } = await supabase
+    .from("posts")
+    .select("id, title, slug, excerpt, category, author, published_at, status, featured_image")
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
+  const posts = (data ?? []) as Post[];
 
   return (
     <>
@@ -86,18 +77,7 @@ export default async function BlogPage() {
                   }}
                 >
                   {/* Image */}
-                  {post.featured_image ? (
-                    <BlogImage src={post.featured_image} alt={post.title} />
-                  ) : (
-                    <div
-                      className="w-full h-48 flex items-center justify-center"
-                      style={{ background: "#0d1f3c" }}
-                    >
-                      <svg className="w-12 h-12 opacity-20" fill="#C9A84C" viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-                      </svg>
-                    </div>
-                  )}
+                  <BlogCardImage src={post.featured_image} alt={post.title} />
 
                   <div className="flex flex-col flex-1 p-5">
                     {/* Category badge */}
