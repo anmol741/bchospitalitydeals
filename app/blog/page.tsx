@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import BlogCardImage from "@/components/BlogCardImage";
 import { supabase, type Post } from "@/lib/supabase";
 
 export const dynamic = 'force-dynamic';
@@ -28,7 +27,7 @@ function formatDate(dateStr: string | null) {
 export default async function BlogPage() {
   const { data } = await supabase
     .from("posts")
-    .select("id, title, slug, excerpt, category, author, published_at, featured_image")
+    .select("id, title, slug, excerpt, category, author, published_at, status")
     .eq("status", "published")
     .order("published_at", { ascending: false })
     .limit(12);
@@ -79,7 +78,9 @@ export default async function BlogPage() {
                   }}
                 >
                   {/* Image */}
-                  <BlogCardImage src={post.featured_image} alt={post.title} />
+                  <div style={{width:'100%', height:'200px', background:'linear-gradient(135deg, #0d1f3c, #1e3a5f)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'48px'}}>
+                    🏨
+                  </div>
 
                   <div className="flex flex-col flex-1 p-5">
                     {/* Category badge */}
