@@ -9,11 +9,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function generateStaticParams() {
-  const { data } = await supabase
-    .from("posts")
-    .select("slug")
-    .eq("status", "published");
-  return (data ?? []).map((post) => ({ slug: post.slug }));
+  return [];
 }
 
 function formatDate(dateStr: string | null) {
