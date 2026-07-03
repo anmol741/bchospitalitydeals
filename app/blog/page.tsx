@@ -4,7 +4,8 @@ import Footer from "@/components/Footer";
 import BlogCardImage from "@/components/BlogCardImage";
 import { supabase, type Post } from "@/lib/supabase";
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 const BADGE_COLORS: Record<string, string> = {
   "Market Updates": "#1a3a6b",
