@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 interface ListingCardProps {
@@ -12,6 +13,7 @@ interface ListingCardProps {
   address?: string;
   index?: number;
   onRequestInfo?: () => void;
+  detailsHref?: string;
 }
 
 
@@ -28,13 +30,14 @@ export default function ListingCard({
   address,
   index = 0,
   onRequestInfo,
+  detailsHref,
 }: ListingCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }}
+      transition={{ duration: 0.3, delay: index * 0.15, ease: "easeOut" }}
       className="relative rounded-xl overflow-hidden group transition-all duration-300 flex flex-col"
       style={{
         background: "linear-gradient(145deg, #0a1628 0%, #0d1f3c 100%)",
@@ -131,12 +134,21 @@ export default function ListingCard({
           >
             Request Info
           </button>
-          <button
-            onClick={onRequestInfo}
-            className="flex-1 px-4 py-2.5 border border-[#C9A84C]/50 text-[#C9A84C] hover:bg-[#C9A84C]/10 font-semibold rounded text-sm transition-all duration-200 hover:border-[#C9A84C]"
-          >
-            Get Details
-          </button>
+          {detailsHref ? (
+            <Link
+              href={detailsHref}
+              className="flex-1 text-center px-4 py-2.5 border border-[#C9A84C]/50 text-[#C9A84C] hover:bg-[#C9A84C]/10 font-semibold rounded text-sm transition-all duration-200 hover:border-[#C9A84C]"
+            >
+              Get Details
+            </Link>
+          ) : (
+            <button
+              onClick={onRequestInfo}
+              className="flex-1 px-4 py-2.5 border border-[#C9A84C]/50 text-[#C9A84C] hover:bg-[#C9A84C]/10 font-semibold rounded text-sm transition-all duration-200 hover:border-[#C9A84C]"
+            >
+              Get Details
+            </button>
+          )}
         </div>
       </div>
 

@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import BlogCardImage from "@/components/BlogCardImage";
 import { supabase, type Post } from "@/lib/supabase";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 const BADGE_COLORS: Record<string, string> = {
   "Market Updates": "#1a3a6b",
@@ -27,9 +27,10 @@ function formatDate(dateStr: string | null) {
 export default async function BlogPage() {
   const { data } = await supabase
     .from("posts")
-    .select("id, title, slug, excerpt, category, author, published_at, status, featured_image")
+    .select("id, title, slug, excerpt, category, author, published_at, featured_image")
     .eq("status", "published")
-    .order("published_at", { ascending: false });
+    .order("published_at", { ascending: false })
+    .limit(12);
   const posts = (data ?? []) as Post[];
 
   return (

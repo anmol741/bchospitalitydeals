@@ -149,7 +149,8 @@ export default function CountryCodeSelect({ dialCode, countryName, onChange, has
 
   useEffect(() => {
     if (open) {
-      setTimeout(() => searchRef.current?.focus(), 50);
+      const timer = setTimeout(() => searchRef.current?.focus(), 50);
+      return () => clearTimeout(timer);
     } else {
       setSearch("");
     }

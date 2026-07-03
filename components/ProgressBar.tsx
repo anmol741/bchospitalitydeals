@@ -61,7 +61,7 @@ export default function ProgressBar({ currentStep }: ProgressBarProps) {
           className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#C9A84C] to-[#E5C97A] rounded-full"
           initial={{ width: 0 }}
           animate={{ width: `${progressPercent}%` }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+          transition={{ duration: 0.4, ease: "easeOut", delay: 0.2 }}
         />
       </div>
 

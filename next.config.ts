@@ -3,11 +3,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      new URL("https://i.ibb.co/**"),
-      new URL("https://drive.google.com/**"),
-      new URL("https://bxgsybgqqyseomtvxyzv.supabase.co/**"),
+      { protocol: "https", hostname: "i.ibb.co" },
+      { protocol: "https", hostname: "drive.google.com" },
+      { protocol: "https", hostname: "*.supabase.co" },
     ],
   },
+  compress: true,
+  poweredByHeader: false,
+  reactStrictMode: true,
 };
 
 export default nextConfig;

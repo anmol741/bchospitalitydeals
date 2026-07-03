@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   const { data } = await supabase
@@ -44,12 +45,14 @@ export default async function BlogPostPage({
       <main className="flex-1" style={{ background: "#050d1a", minHeight: "100vh" }}>
         {/* Featured image */}
         {post.featured_image && (
-          <div className="w-full" style={{ maxHeight: "480px", overflow: "hidden" }}>
-            <img
+          <div className="relative w-full" style={{ height: "480px", overflow: "hidden" }}>
+            <Image
               src={post.featured_image}
               alt={post.title}
-              className="w-full object-cover"
-              style={{ maxHeight: "480px" }}
+              fill
+              priority
+              sizes="100vw"
+              style={{ objectFit: "cover" }}
             />
           </div>
         )}
