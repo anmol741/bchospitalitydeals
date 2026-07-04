@@ -31,6 +31,15 @@ export const metadata: Metadata = {
     locale: "en_CA",
     type: "website",
   },
+  icons: {
+    icon: [
+      { url: '/favicon.png?v=2', sizes: 'any', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/favicon.png?v=2' },
+    ],
+    shortcut: '/favicon.png?v=2',
+  },
 };
 
 export default function RootLayout({
