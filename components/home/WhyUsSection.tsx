@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { trackContact } from "@/lib/fbpixel";
 
 export default function WhyUsSection() {
   return (
@@ -40,6 +41,7 @@ export default function WhyUsSection() {
                   href={href}
                   target={href.startsWith("http") ? "_blank" : undefined}
                   rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  onClick={href.startsWith("tel:") ? () => trackContact("Phone Call") : undefined}
                   className="flex items-center justify-center gap-2 text-sm transition-opacity hover:opacity-80"
                   style={{ color: "#C9A84C" }}
                 >

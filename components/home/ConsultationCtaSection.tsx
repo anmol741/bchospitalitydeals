@@ -1,3 +1,7 @@
+"use client";
+
+import { trackSchedule } from "@/lib/fbpixel";
+
 export default function ConsultationCtaSection() {
   return (
     <section
@@ -21,6 +25,7 @@ export default function ConsultationCtaSection() {
           href="https://my-url.in/booking-link"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackSchedule()}
           className="inline-flex items-center gap-2 px-8 py-4 rounded font-bold text-sm tracking-wider transition-all hover:opacity-90 active:scale-95 shadow-lg"
           style={{ background: "linear-gradient(135deg, #C9A84C, #a8893d)", color: "#000000" }}
         >

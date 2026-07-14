@@ -1,4 +1,6 @@
-export const submitToCRM = (params: Record<string, string>) => {
+// Returns true only when the GoEasyAI webhook responds with an ok status,
+// so callers can gate success UI / conversion tracking on a real success.
+export const submitToCRM = async (params: Record<string, string>): Promise<boolean> => {
   const payload = {
     api_token: 'a98af636848d6ab8cc8ca2d19541e47b',
     contact_name: params.contact_name || '',
@@ -13,15 +15,20 @@ export const submitToCRM = (params: Record<string, string>) => {
     '{%contact.additio_ewnbhy%}': params['additio_ewnbhy'] || '',
   }
 
-  fetch(
-    'https://admin.goeasyai.ca/api/automations/6a3c38944792f/execute',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    }
-  ).catch(() => {})
+  try {
+    const res = await fetch(
+      'https://admin.goeasyai.ca/api/automations/6a3c38944792f/execute',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      }
+    )
+    return res.ok
+  } catch {
+    return false
+  }
 }

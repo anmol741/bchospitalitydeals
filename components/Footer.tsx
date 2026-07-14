@@ -1,5 +1,7 @@
 "use client";
 
+import { trackContact, trackSchedule } from "@/lib/fbpixel";
+
 const SOCIAL = [
   {
     href: "https://www.facebook.com/realtorcj",
@@ -76,6 +78,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
+                  onClick={label === "WhatsApp" ? () => trackContact("WhatsApp") : undefined}
                   className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
                   style={{ border: "1px solid rgba(201,168,76,0.35)", color: "#C9A84C" }}
                   onMouseEnter={(e) => {
@@ -111,6 +114,7 @@ export default function Footer() {
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => trackSchedule()}
                       className="text-sm transition-colors hover:text-[#C9A84C]"
                       style={{ color: "rgba(255,255,255,0.65)" }}
                     >
@@ -160,7 +164,7 @@ export default function Footer() {
             <p className="text-xs font-bold uppercase tracking-widest mb-5" style={{ color: "#C9A84C" }}>CONTACT US</p>
             <ul className="space-y-3 mb-6">
               <li>
-                <a href="tel:7788969552" className="flex items-center gap-3 text-sm transition-colors hover:text-[#C9A84C]" style={{ color: "rgba(255,255,255,0.75)" }}>
+                <a href="tel:7788969552" onClick={() => trackContact("Phone Call")} className="flex items-center gap-3 text-sm transition-colors hover:text-[#C9A84C]" style={{ color: "rgba(255,255,255,0.75)" }}>
                   <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" style={{ color: "#C9A84C" }} viewBox="0 0 24 24">
                     <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.4 11.4 0 003.57.57 1 1 0 011 1V20a1 1 0 01-1 1C9.61 21 3 14.39 3 6a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.01l-2.21 2.21z"/>
                   </svg>

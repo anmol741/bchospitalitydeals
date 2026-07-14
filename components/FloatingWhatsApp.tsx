@@ -1,9 +1,14 @@
+"use client";
+
+import { trackContact } from "@/lib/fbpixel";
+
 export default function FloatingWhatsApp() {
   return (
     <a
       href="https://wa.me/17788969552"
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => trackContact("WhatsApp")}
       className="fixed bottom-6 left-6 z-50 flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-full shadow-lg font-medium text-sm animate-pulse transition-colors"
     >
       <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">

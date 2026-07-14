@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CountryCodeSelect from "@/components/CountryCodeSelect";
 import { submitToCRM } from "@/lib/submitToCRM";
+import { trackLead, trackContact } from "@/lib/fbpixel";
 
 type ContactFormParams = {
   name: string; email: string; countryCode: string; phone: string;
@@ -104,6 +105,7 @@ export default function ContactFormSection() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitFailed, setSubmitFailed] = useState(false);
 
   const set = useCallback(<K extends keyof ContactFormParams>(k: K, v: ContactFormParams[K]) => {
     setFd((prev) => ({ ...prev, [k]: v }));
@@ -159,7 +161,8 @@ export default function ContactFormSection() {
       return;
     }
     setSubmitting(true);
-    submitToCRM({
+    setSubmitFailed(false);
+    const ok = await submitToCRM({
       contact_name: fd.name,
       contact_email: fd.email,
       contact_phone: fd.countryCode + fd.phone,
@@ -171,8 +174,13 @@ export default function ContactFormSection() {
       'are_you_qnylji': fd.ndaComfort,
       'additio_ewnbhy': fd.details,
     });
-    setSubmitted(true);
     setSubmitting(false);
+    if (ok) {
+      setSubmitted(true);
+      trackLead();
+    } else {
+      setSubmitFailed(true);
+    }
   };
 
   const inputClass = (key: keyof FormErrors) =>
@@ -243,7 +251,11 @@ export default function ContactFormSection() {
               <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "#C9A84C" }}>
                 PREFER TO CALL?
               </p>
-              <a href="tel:7788969552" className="block text-2xl font-bold text-white hover:text-[#C9A84C] transition-colors mb-2">
+              <a
+                href="tel:7788969552"
+                onClick={() => trackContact("Phone Call")}
+                className="block text-2xl font-bold text-white hover:text-[#C9A84C] transition-colors mb-2"
+              >
                 778-896-9552
               </a>
               <a href="mailto:cj.kalra@century21.ca" className="text-sm hover:opacity-80 transition-opacity" style={{ color: "#C9A84C" }}>
@@ -498,6 +510,12 @@ export default function ContactFormSection() {
                   </span>
                 ) : "Request Information →"}
               </button>
+
+              {submitFailed && (
+                <p className="text-xs text-center text-red-400">
+                  Something went wrong sending your request. Please try again or call us at 778-896-9552.
+                </p>
+              )}
 
               <p className="text-xs text-center leading-relaxed" style={{ color: "#94a3b8" }}>
                 By submitting you agree to receive communications from CJ Kalra, Century 21 Coastal Realty Ltd.

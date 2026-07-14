@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { trackContact, trackSchedule } from "@/lib/fbpixel";
 
 interface DetailRow {
   label: string;
@@ -183,6 +186,7 @@ export default function ListingDetail({ data }: { data: ListingDetailData }) {
                       href="https://my-url.in/booking-link"
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => trackSchedule()}
                       className="w-full text-center px-4 py-3 border border-[#C9A84C]/50 text-[#C9A84C] hover:bg-[#C9A84C]/10 font-semibold rounded text-sm transition-all duration-200 hover:border-[#C9A84C]"
                     >
                       Book Consultation
@@ -221,6 +225,7 @@ export default function ListingDetail({ data }: { data: ListingDetailData }) {
                         href={href}
                         target={href.startsWith("http") ? "_blank" : undefined}
                         rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                        onClick={href.startsWith("tel:") ? () => trackContact("Phone Call") : undefined}
                         className="flex items-center justify-center gap-2 text-sm transition-opacity hover:opacity-80"
                         style={{ color: "#C9A84C" }}
                       >

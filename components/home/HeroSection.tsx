@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { trackSchedule } from "@/lib/fbpixel";
 
 const HERO_WORDS = ["Exclusive", "|", "Confidential", "|", "Business", "Opportunities"];
 
@@ -68,6 +69,7 @@ export default function HeroSection() {
             href="https://my-url.in/booking-link"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackSchedule()}
             className="px-8 py-4 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C]/10 font-bold rounded text-base transition-all duration-200"
           >
             Book Consultation

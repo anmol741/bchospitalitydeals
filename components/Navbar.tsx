@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { trackContact, trackSchedule } from "@/lib/fbpixel";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -51,6 +52,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-6">
             <a
               href="tel:7788969552"
+              onClick={() => trackContact("Phone Call")}
               className="flex items-center gap-2 text-[#C9A84C] hover:text-[#E5C97A] transition-colors font-medium"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -76,6 +78,7 @@ export default function Navbar() {
           <div className="flex md:hidden items-center gap-3">
             <a
               href="tel:7788969552"
+              onClick={() => trackContact("Phone Call")}
               className="text-[#C9A84C] text-sm font-medium"
             >
               778-896-9552
@@ -126,7 +129,7 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full px-5 py-3 border border-[#C9A84C] text-[#C9A84C] font-semibold rounded text-sm text-center transition-all hover:bg-[#C9A84C]/10"
-                onClick={() => setMenuOpen(false)}
+                onClick={() => { setMenuOpen(false); trackSchedule(); }}
               >
                 Book Consultation
               </a>
