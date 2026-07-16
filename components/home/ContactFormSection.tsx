@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import CountryCodeSelect from "@/components/CountryCodeSelect";
 import { submitToCRM } from "@/lib/submitToCRM";
 import { trackLead, trackContact } from "@/lib/fbpixel";
+import { trackGoogleAdsConversion } from "@/lib/googleAds";
 
 type ContactFormParams = {
   name: string; email: string; countryCode: string; phone: string;
@@ -178,6 +179,7 @@ export default function ContactFormSection() {
     if (ok) {
       setSubmitted(true);
       trackLead();
+      trackGoogleAdsConversion();
     } else {
       setSubmitFailed(true);
     }
