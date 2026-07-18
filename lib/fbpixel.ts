@@ -22,3 +22,8 @@ export function trackContact(name: string) {
 export function trackSchedule() {
   fbq("track", "Schedule");
 }
+
+/** Fires on the thank-you panel once an NDA inquiry has been submitted. */
+export function trackCompleteRegistration() {
+  fbq("track", "CompleteRegistration", { content_name: "NDA Inquiry Submitted" });
+}

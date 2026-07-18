@@ -12,3 +12,15 @@ export function trackGoogleAdsConversion() {
     currency: "CAD",
   });
 }
+
+// TODO: conversion_label is a placeholder (the AW- account ID, not a real label).
+// Replace it with the actual "AW-18084530712/XXXXXXXXX" label once the
+// "form_submit_conversion" Google Ads Conversion Tracking tag is published in GTM.
+export function trackFormSubmitConversion() {
+  if (typeof window === "undefined") return;
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: "form_submit_conversion",
+    conversion_label: "AW-18084530712",
+  });
+}

@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CountryCodeSelect from "@/components/CountryCodeSelect";
 import { submitToCRM } from "@/lib/submitToCRM";
-import { trackLead, trackContact } from "@/lib/fbpixel";
-import { trackGoogleAdsConversion } from "@/lib/googleAds";
+import { trackLead, trackContact, trackCompleteRegistration } from "@/lib/fbpixel";
+import { trackGoogleAdsConversion, trackFormSubmitConversion } from "@/lib/googleAds";
+
+const OPEN_DELAY_MS = 2000;
+const BOOKING_URL = "https://my-url.in/booking-link";
 
 type ContactFormParams = {
   name: string; email: string; countryCode: string; phone: string;
@@ -87,6 +90,9 @@ type FormErrors = Partial<Record<keyof ContactFormParams | "privacy", string>>;
 
 export default function ContactFormSection() {
   const formRef = useRef<HTMLFormElement>(null);
+  // Holds the tab opened synchronously on submit (before the CRM await breaks the
+  // user-gesture chain), so we can navigate it later instead of re-opening one.
+  const bookingTabRef = useRef<Window | null>(null);
 
   const [fd, setFd] = useState<ContactFormParams>({
     name: "",
@@ -107,6 +113,29 @@ export default function ContactFormSection() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitFailed, setSubmitFailed] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
+
+  // Fires the thank-you conversion events and auto-opens the booking link once
+  // the inline success panel has been showing for OPEN_DELAY_MS.
+  useEffect(() => {
+    if (!submitted) return;
+
+    const timer = setTimeout(() => {
+      if (typeof window !== "undefined" && typeof window.fbq === "function") {
+        trackCompleteRegistration();
+      }
+      trackFormSubmitConversion();
+
+      const tab = bookingTabRef.current;
+      if (tab && !tab.closed) {
+        tab.location.href = BOOKING_URL;
+      } else {
+        setShowFallback(true);
+      }
+    }, OPEN_DELAY_MS);
+
+    return () => clearTimeout(timer);
+  }, [submitted]);
 
   const set = useCallback(<K extends keyof ContactFormParams>(k: K, v: ContactFormParams[K]) => {
     setFd((prev) => ({ ...prev, [k]: v }));
@@ -161,6 +190,14 @@ export default function ContactFormSection() {
       scrollToFirstError(errs);
       return;
     }
+
+    // Open the booking tab synchronously, still inside this click's user-gesture
+    // chain, so the browser doesn't treat the later navigation as a blocked popup.
+    bookingTabRef.current = window.open("", "_blank");
+    if (bookingTabRef.current) {
+      bookingTabRef.current.opener = null;
+    }
+
     setSubmitting(true);
     setSubmitFailed(false);
     const ok = await submitToCRM({
@@ -182,6 +219,8 @@ export default function ContactFormSection() {
       trackGoogleAdsConversion();
     } else {
       setSubmitFailed(true);
+      bookingTabRef.current?.close();
+      bookingTabRef.current = null;
     }
   };
 
@@ -290,6 +329,16 @@ export default function ContactFormSection() {
                 <p className="text-sm leading-relaxed max-w-sm" style={{ color: "#e8dfc8" }}>
                   We have received your inquiry. CJ Kalra will be in touch within 1 business day.
                 </p>
+                {showFallback && (
+                  <a
+                    href={BOOKING_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 px-8 py-4 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C]/10 font-bold rounded text-base transition-all duration-200"
+                  >
+                    📅 Click Here to Book Your Consultation
+                  </a>
+                )}
               </div>
             ) : (
             <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-6">
