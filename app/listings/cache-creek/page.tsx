@@ -8,6 +8,7 @@ const data: ListingDetailData = {
   price: "$120,000",
   mls: "10391540",
   sizeLabel: "Patio Included",
+  propertyName: "Cache Creek Restaurant ($120K)",
   highlights: [
     "Trans-Canada Highway Prime Location",
     "Turnkey Operation",

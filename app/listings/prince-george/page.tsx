@@ -8,6 +8,7 @@ const data: ListingDetailData = {
   price: "$650,000",
   mls: "C8079611",
   sizeLabel: "~9,000 Sq Ft",
+  propertyName: "Prince George Restaurant ($650K)",
   highlights: [
     "Highway 16 High Traffic Location",
     "Turnkey — Full Equipment Included",

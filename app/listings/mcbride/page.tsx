@@ -8,6 +8,7 @@ const data: ListingDetailData = {
   price: "$180,000",
   mls: "C8079536",
   sizeLabel: "2,800 Sq Ft",
+  propertyName: "McBride Restaurant ($180K)",
   highlights: [
     "Highway Exposure — Tourist Corridor",
     "Turnkey — Assets Included",

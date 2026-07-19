@@ -8,6 +8,7 @@ const data: ListingDetailData = {
   price: "$140,000",
   mls: "10392063",
   sizeLabel: "2,000 Sq Ft",
+  propertyName: "Dawson Creek Restaurant ($140K)",
   highlights: [
     "Turnkey — Full Equipment Included",
     "Rent $4,000/mo Gross Lease",

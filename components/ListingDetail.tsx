@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import RequestInfoForm from "@/components/RequestInfoForm";
 import { trackContact, trackSchedule } from "@/lib/fbpixel";
 
 interface DetailRow {
@@ -16,6 +17,7 @@ export interface ListingDetailData {
   price: string;
   mls: string;
   sizeLabel: string;
+  propertyName: string;
   highlights: string[];
   about: string;
   leaseDetails: DetailRow[];
@@ -177,7 +179,7 @@ export default function ListingDetail({ data }: { data: ListingDetailData }) {
                   </p>
                   <div className="flex flex-col gap-3">
                     <Link
-                      href="/#form-section"
+                      href="#form-section"
                       className="w-full text-center px-4 py-3 bg-[#C9A84C] hover:bg-[#E5C97A] text-[#0D0D0D] font-semibold rounded text-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
                     >
                       Request Information
@@ -264,6 +266,8 @@ export default function ListingDetail({ data }: { data: ListingDetailData }) {
             Do not disturb business operations. All information subject to verification.
           </p>
         </div>
+
+        <RequestInfoForm defaultProperty={data.propertyName} />
       </main>
       <Footer />
     </>
