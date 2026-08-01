@@ -1,11 +1,12 @@
+import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-// Server-side proxy to the GoEasyAI CRM webhook. Keeps the api_token and the
-// webhook URL out of the browser bundle, and re-validates required fields so
-// a direct POST to this route (bypassing the form's client-side validation)
-// can't create blank CRM entries.
-const GOEASYAI_URL =
-  "https://admin.goeasyai.ca/api/automations/6a3c38944792f/execute";
+// Server-side proxy to the new CRM's signed webhook. Keeps CRM_WEBHOOK_SECRET
+// out of the browser bundle, and re-validates required fields so a direct
+// POST to this route (bypassing the form's client-side validation) can't
+// create blank CRM entries.
+const CRM_WEBHOOK_URL =
+  "https://myappzbackend.com/functions/v1/workflow-webhook/ecqlf22tqecne5la";
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 3;
@@ -86,40 +87,48 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const apiToken = process.env.GOEASYAI_API_TOKEN;
-  if (!apiToken) {
-    console.error("submit-lead: GOEASYAI_API_TOKEN is not set");
+  const secret = process.env.CRM_WEBHOOK_SECRET;
+  if (!secret) {
+    console.error("lead-webhook: CRM_WEBHOOK_SECRET is not set");
     return NextResponse.json(
       { ok: false, error: "Server misconfiguration." },
       { status: 500 }
     );
   }
 
-  // Same payload shape/field mapping as before — only the token's origin changed.
   const payload = {
-    api_token: apiToken,
     contact_name: name,
     contact_email: email,
     contact_phone: phone,
     contact_source: body.contact_source || "BC Hospitality Deals Website",
-    "{%contact.which_p_wshrbo%}": body.which_p_wshrbo || "",
-    "{%contact.buyer_profile__ajl%}": body.buyer_profile__ajl || "",
-    "{%contact.purchase_budget__tsm%}": body.purchase_budget__tsm || "",
-    "{%contact.when_ar_jlvatx%}": body.when_ar_jlvatx || "",
-    "{%contact.are_you_qnylji%}": body.are_you_qnylji || "",
-    "{%contact.additio_ewnbhy%}": body.additio_ewnbhy || "",
+    which_p_wshrbo: body.which_p_wshrbo || "",
+    buyer_profile__ajl: body.buyer_profile__ajl || "",
+    purchase_budget__tsm: body.purchase_budget__tsm || "",
+    when_ar_jlvatx: body.when_ar_jlvatx || "",
+    are_you_qnylji: body.are_you_qnylji || "",
+    additio_ewnbhy: body.additio_ewnbhy || "",
   };
+  const serializedPayload = JSON.stringify(payload);
+  const signature = crypto
+    .createHmac("sha256", secret)
+    .update(serializedPayload)
+    .digest("hex");
 
   try {
-    const res = await fetch(GOEASYAI_URL, {
+    const res = await fetch(CRM_WEBHOOK_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
+        "X-Webhook-Signature": `sha256=${signature}`,
       },
-      body: JSON.stringify(payload),
+      body: serializedPayload,
     });
-    return NextResponse.json({ ok: res.ok }, { status: res.ok ? 200 : 502 });
+    const text = await res.text();
+    console.log("CRM upstream status:", res.status, text);
+    return new NextResponse(text, {
+      status: res.status,
+      headers: { "Content-Type": res.headers.get("Content-Type") ?? "application/json" },
+    });
   } catch {
     return NextResponse.json(
       { ok: false, error: "Failed to reach CRM." },
