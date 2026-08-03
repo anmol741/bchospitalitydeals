@@ -58,6 +58,18 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <GoogleTagManager gtmId="GTM-TK4CMZRL" />
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-7NCXTGLRKX"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7NCXTGLRKX');
+        `}
+      </Script>
       <Script id="meta-pixel" strategy="afterInteractive">
         {`
           !function(f,b,e,v,n,t,s)
