@@ -70,6 +70,18 @@ export default function RootLayout({
           gtag('config', 'G-7NCXTGLRKX');
         `}
       </Script>
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=AW-18084530712"
+        strategy="afterInteractive"
+      />
+      <Script id="google-ads" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-18084530712');
+        `}
+      </Script>
       <Script id="meta-pixel" strategy="afterInteractive">
         {`
           !function(f,b,e,v,n,t,s)
