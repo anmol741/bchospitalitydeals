@@ -21,6 +21,7 @@ export const PROPERTIES = [
   "McBride Restaurant ($180K)",
   "Cache Creek Restaurant ($120K)",
   "Dawson Creek Restaurant ($140K)",
+  "Merritt Motel ($1.8M)",
   "Hotels",
   "Restaurants in Other Area in BC",
   "Restaurants in Lower Mainland BC",

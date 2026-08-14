@@ -68,6 +68,21 @@ const LISTINGS = [
     value: "Dawson Creek Restaurant ($140K)",
     detailsHref: "/listings/dawson-creek",
   },
+  {
+    location: "Merritt, BC",
+    title: "14-Unit Motel with Owner Residence",
+    price: "$1,800,000",
+    mls: "10396244",
+    features: [
+      "14-unit motel + 3-bed owner/manager residence",
+      "Turnkey operation — proven income",
+      "Easy highway access & excellent visibility",
+      "Mix of monthly & daily rentals",
+      "0.25 acre freehold land",
+    ],
+    value: "Merritt Motel ($1.8M)",
+    detailsHref: "/listings/merritt-motel",
+  },
 ];
 
 const scrollToForm = () =>

@@ -143,6 +143,7 @@ export default function Footer() {
                 "McBride – Hotel Restaurant & Party Hall ($180K)",
                 "Cache Creek – Standalone Highway Restaurant ($120K)",
                 "Dawson Creek – Restaurant in Franchise Hotel ($140K)",
+                "Merritt – 14-Unit Motel with Owner Residence ($1.8M)",
                 "Off-Market Opportunities Available",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
