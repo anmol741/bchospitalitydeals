@@ -146,7 +146,7 @@ export default function ListingsSectionWA() {
           className="flex-shrink-0 flex items-center justify-center gap-2 px-5 py-3 rounded font-semibold text-xs tracking-wider transition-all hover:opacity-90 active:scale-95 w-full sm:w-auto"
           style={{ background: "linear-gradient(135deg, #C9A84C, #a8893d)", color: "#000000", whiteSpace: "nowrap" }}
         >
-          🔑 REQUEST INFORMATION
+          🔑  whatsapp Us
         </a>
       </div>
 

@@ -44,23 +44,23 @@ const SOCIAL = [
 const OUR_LISTINGS = [
   {
     label: "Prince George – Restaurant & Banquet Hall ($650K)",
-    message: listingWhatsAppMessage("Prince George, BC", "Restaurant & Banquet Hall", "$650,000", "C8079611"),
+    message: listingWhatsAppMessage("Restaurant & Banquet Hall", "$650,000"),
   },
   {
     label: "McBride – Hotel Restaurant & Party Hall ($180K)",
-    message: listingWhatsAppMessage("McBride, BC", "Highway Restaurant & Party Hall", "$180,000", "C8079536"),
+    message: listingWhatsAppMessage("Highway Restaurant & Party Hall", "$180,000"),
   },
   {
     label: "Cache Creek – Standalone Highway Restaurant ($120K)",
-    message: listingWhatsAppMessage("Cache Creek, BC", "Only Restaurant in Town — with Patio", "$120,000", "10391540"),
+    message: listingWhatsAppMessage("Only Restaurant in Town — with Patio", "$120,000"),
   },
   {
     label: "Dawson Creek – Restaurant in Franchise Hotel ($140K)",
-    message: listingWhatsAppMessage("Dawson Creek, BC", "Restaurant in Franchise Hotel", "$140,000", "10392063"),
+    message: listingWhatsAppMessage("Restaurant in Franchise Hotel", "$140,000"),
   },
   {
     label: "Merritt – 14-Unit Motel with Owner Residence ($1.8M)",
-    message: listingWhatsAppMessage("Merritt, BC", "14-Unit Motel with Owner Residence", "$1,800,000", "10396244"),
+    message: listingWhatsAppMessage("14-Unit Motel with Owner Residence", "$1,800,000"),
   },
   {
     label: "Off-Market Opportunities Available",
@@ -132,7 +132,7 @@ export default function FooterWA() {
                 { label: "Home", action: () => scrollToSection("home"), href: undefined, isWhatsApp: false },
                 { label: "Current Listings", action: () => scrollToSection("listings"), href: undefined, isWhatsApp: false },
                 { label: "Why Work With Us", action: () => scrollToSection("why-us"), href: undefined, isWhatsApp: false },
-                { label: "Request Information", action: undefined, href: buildWhatsAppUrl(GENERIC_WHATSAPP_MESSAGE), isWhatsApp: true },
+                { label: "whatsapp Us ", action: undefined, href: buildWhatsAppUrl(GENERIC_WHATSAPP_MESSAGE), isWhatsApp: true },
                 { label: "Book Consultation", action: undefined, href: "https://my-url.in/booking-link", isWhatsApp: false },
               ].map(({ label, action, href, isWhatsApp }) => (
                 <li key={label} className="flex items-center gap-2">

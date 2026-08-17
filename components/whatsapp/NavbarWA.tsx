@@ -71,7 +71,7 @@ export default function NavbarWA() {
               onClick={trackWhatsAppLead}
               className="px-5 py-2.5 bg-[#C9A84C] hover:bg-[#E5C97A] text-[#0D0D0D] font-semibold rounded text-sm transition-all duration-200 hover:scale-105 active:scale-95"
             >
-              Request Info
+              whatsapp Us 
             </a>
           </div>
 
@@ -126,7 +126,7 @@ export default function NavbarWA() {
                 onClick={() => { setMenuOpen(false); trackWhatsAppLead(); }}
                 className="w-full px-5 py-3 bg-[#C9A84C] hover:bg-[#E5C97A] text-[#0D0D0D] font-semibold rounded text-sm transition-all text-center"
               >
-                Request Information
+                whatsapp
               </a>
               <a
                 href="https://my-url.in/booking-link"

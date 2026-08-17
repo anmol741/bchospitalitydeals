@@ -27,7 +27,7 @@ export default function ListingCardWA({
   index = 0,
   detailsHref,
 }: ListingCardWAProps) {
-  const waHref = buildWhatsAppUrl(listingWhatsAppMessage(location, title, price, mls));
+  const waHref = buildWhatsAppUrl(listingWhatsAppMessage(title, price));
 
   return (
     <motion.div
@@ -135,9 +135,9 @@ export default function ListingCardWA({
             target="_blank"
             rel="noopener noreferrer"
             onClick={trackWhatsAppLead}
-            className="flex-1 text-center px-4 py-2.5 bg-[#C9A84C] hover:bg-[#E5C97A] text-[#0D0D0D] font-semibold rounded text-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
+            className="flex-1 text-center px-3 py-2.5 bg-[#C9A84C] hover:bg-[#E5C97A] text-[#0D0D0D] font-semibold rounded text-[13px] whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-95"
           >
-            Request Info
+            whatsapp Us
           </a>
           <Link
             href={detailsHref}

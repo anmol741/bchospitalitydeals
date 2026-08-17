@@ -66,7 +66,7 @@ export default function HeroSectionWA() {
             className="px-8 py-4 text-black font-bold rounded text-base transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-[#C9A84C]/20"
             style={{ background: "linear-gradient(135deg, #C9A84C, #a8893d)" }}
           >
-            Request Information
+            whatsapp Us
           </a>
           <a
             href="https://my-url.in/booking-link"

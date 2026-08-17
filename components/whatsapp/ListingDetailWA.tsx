@@ -66,7 +66,7 @@ function DetailTable({ title, rows }: { title: string; rows: DetailRow[] }) {
 }
 
 export default function ListingDetailWA({ data }: { data: ListingDetailWAData }) {
-  const waHref = buildWhatsAppUrl(listingWhatsAppMessage(data.location, data.title, data.price, data.mls));
+  const waHref = buildWhatsAppUrl(listingWhatsAppMessage(data.title, data.price));
 
   return (
     <>
@@ -188,7 +188,7 @@ export default function ListingDetailWA({ data }: { data: ListingDetailWAData })
                       onClick={trackWhatsAppLead}
                       className="w-full text-center px-4 py-3 bg-[#C9A84C] hover:bg-[#E5C97A] text-[#0D0D0D] font-semibold rounded text-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
                     >
-                      Request Information
+                       whatsapp Us
                     </a>
                     <a
                       href="https://my-url.in/booking-link"
