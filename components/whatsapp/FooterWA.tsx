@@ -63,6 +63,10 @@ const OUR_LISTINGS = [
     message: listingWhatsAppMessage("14-Unit Motel with Owner Residence", "$1,800,000"),
   },
   {
+    label: "Commercial Drive – Turnkey Vape Store, Vancouver ($150K)",
+    message: listingWhatsAppMessage("Turnkey Vape Store for Sale", "$150,000"),
+  },
+  {
     label: "Off-Market Opportunities Available",
     message: GENERIC_WHATSAPP_MESSAGE,
   },

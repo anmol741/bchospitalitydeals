@@ -144,6 +144,7 @@ export default function Footer() {
                 "Cache Creek – Standalone Highway Restaurant ($120K)",
                 "Dawson Creek – Restaurant in Franchise Hotel ($140K)",
                 "Merritt – 14-Unit Motel with Owner Residence ($1.8M)",
+                "Commercial Drive – Turnkey Vape Store, Vancouver ($150K)",
                 "Off-Market Opportunities Available",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
