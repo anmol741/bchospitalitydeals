@@ -66,7 +66,7 @@ export default function HeroSection() {
             Request Information
           </button>
           <a
-            href="https://my-url.in/booking-link"
+            href="https://superadmin.goeasyai.ca/v3/realtorcj/consultation"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackSchedule()}

@@ -22,7 +22,7 @@ export default function ConsultationCtaSection() {
           Discuss available opportunities, your investment criteria, and strategic goals with a Commercial Real Estate Specialist. No obligation.
         </p>
         <a
-          href="https://my-url.in/booking-link"
+          href="https://superadmin.goeasyai.ca/v3/realtorcj/consultation"
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackSchedule()}

@@ -8,7 +8,7 @@ import { trackLead, trackContact, trackCompleteRegistration } from "@/lib/fbpixe
 import { trackGoogleAdsConversion, trackFormSubmitConversion } from "@/lib/googleAds";
 
 const OPEN_DELAY_MS = 2000;
-const BOOKING_URL = "https://my-url.in/booking-link";
+const BOOKING_URL = "https://superadmin.goeasyai.ca/v3/realtorcj/consultation";
 
 type ContactFormParams = {
   name: string; email: string; countryCode: string; phone: string;

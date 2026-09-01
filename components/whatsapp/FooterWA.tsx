@@ -137,7 +137,7 @@ export default function FooterWA() {
                 { label: "Current Listings", action: () => scrollToSection("listings"), href: undefined, isWhatsApp: false },
                 { label: "Why Work With Us", action: () => scrollToSection("why-us"), href: undefined, isWhatsApp: false },
                 { label: "whatsapp Us ", action: undefined, href: buildWhatsAppUrl(GENERIC_WHATSAPP_MESSAGE), isWhatsApp: true },
-                { label: "Book Consultation", action: undefined, href: "https://my-url.in/booking-link", isWhatsApp: false },
+                { label: "Book Consultation", action: undefined, href: "https://superadmin.goeasyai.ca/v3/realtorcj/consultation", isWhatsApp: false },
               ].map(({ label, action, href, isWhatsApp }) => (
                 <li key={label} className="flex items-center gap-2">
                   <span className="text-[#C9A84C] text-xs flex-shrink-0">•</span>

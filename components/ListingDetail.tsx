@@ -185,7 +185,7 @@ export default function ListingDetail({ data }: { data: ListingDetailData }) {
                       Request Information
                     </Link>
                     <a
-                      href="https://my-url.in/booking-link"
+                      href="https://superadmin.goeasyai.ca/v3/realtorcj/consultation"
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => trackSchedule()}

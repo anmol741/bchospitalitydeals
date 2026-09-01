@@ -129,7 +129,7 @@ export default function NavbarWA() {
                 whatsapp
               </a>
               <a
-                href="https://my-url.in/booking-link"
+                href="https://superadmin.goeasyai.ca/v3/realtorcj/consultation"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full px-5 py-3 border border-[#C9A84C] text-[#C9A84C] font-semibold rounded text-sm text-center transition-all hover:bg-[#C9A84C]/10"

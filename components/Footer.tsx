@@ -105,7 +105,7 @@ export default function Footer() {
                 { label: "Current Listings", action: () => scrollToSection("listings"), href: undefined },
                 { label: "Why Work With Us", action: () => scrollToSection("why-us"), href: undefined },
                 { label: "Request Information", action: () => scrollToSection("form-section"), href: undefined },
-                { label: "Book Consultation", action: undefined, href: "https://my-url.in/booking-link" },
+                { label: "Book Consultation", action: undefined, href: "https://superadmin.goeasyai.ca/v3/realtorcj/consultation" },
               ].map(({ label, action, href }) => (
                 <li key={label} className="flex items-center gap-2">
                   <span className="text-[#C9A84C] text-xs flex-shrink-0">•</span>
