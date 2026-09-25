@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { buildWhatsAppUrl, listingWhatsAppMessage, trackWhatsAppLead } from "@/lib/whatsapp";
+import { buildWhatsAppUrl, listingWhatsAppMessage, trackListingWhatsAppLead, trackWhatsAppLead } from "@/lib/whatsapp";
 
 interface ListingCardWAProps {
   location: string;
@@ -10,10 +10,11 @@ interface ListingCardWAProps {
   price: string;
   features: string[];
   badge?: string;
-  mls: string;
+  mls?: string;
   address?: string;
   index?: number;
   detailsHref: string;
+  pixelContentName?: string;
 }
 
 export default function ListingCardWA({
@@ -26,6 +27,7 @@ export default function ListingCardWA({
   address,
   index = 0,
   detailsHref,
+  pixelContentName,
 }: ListingCardWAProps) {
   const waHref = buildWhatsAppUrl(listingWhatsAppMessage(title, price));
 
@@ -134,7 +136,7 @@ export default function ListingCardWA({
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={trackWhatsAppLead}
+            onClick={pixelContentName ? () => trackListingWhatsAppLead(pixelContentName) : trackWhatsAppLead}
             className="flex-1 text-center px-3 py-2.5 bg-[#C9A84C] hover:bg-[#E5C97A] text-[#0D0D0D] font-semibold rounded text-[13px] whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-95"
           >
             whatsapp Us

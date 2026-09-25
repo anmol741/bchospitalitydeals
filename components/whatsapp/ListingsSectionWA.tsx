@@ -1,105 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { LISTINGS } from "@/lib/listings";
 import ListingCardWA from "@/components/whatsapp/ListingCardWA";
 import { GENERIC_WHATSAPP_MESSAGE, buildWhatsAppUrl, trackWhatsAppLead } from "@/lib/whatsapp";
-
-const LISTINGS = [
-  {
-    location: "Prince George, BC",
-    title: "Restaurant & Banquet Hall",
-    price: "$650,000",
-    mls: "C8079611",
-    features: [
-      "~9,000 sq ft full-service facility",
-      "Located in franchise hotel complex",
-      "Rent under $11,000/month",
-      "Banquet capacity — events & weddings",
-      "Full commercial kitchen equipment",
-    ],
-    badge: "PREMIUM",
-    value: "Prince George Restaurant ($650K)",
-    detailsHref: "/whatsapp/listings/prince-george",
-  },
-  {
-    location: "McBride, BC",
-    title: "Highway Restaurant & Party Hall",
-    price: "$180,000",
-    mls: "C8079536",
-    features: [
-      "Prime highway location",
-      "Located in franchise hotel",
-      "Rent ~$4,700/mo — all inclusive",
-      "Party hall for events",
-      "Established local clientele",
-    ],
-    value: "McBride Restaurant ($180K)",
-    detailsHref: "/whatsapp/listings/mcbride",
-  },
-  {
-    location: "Cache Creek, BC",
-    title: "Only Restaurant in Town — with Patio",
-    price: "$120,000",
-    mls: "10391540",
-    address: "987 Trans Canada Highway, Cache Creek, BC V0K 1H0",
-    features: [
-      "No restaurant competition in town",
-      "Outdoor patio seating",
-      "Rent ~$2,000/month",
-      "Strong local & traveller traffic",
-      "Turn-key operation",
-    ],
-    badge: "EXCLUSIVE",
-    value: "Cache Creek Restaurant ($120K)",
-    detailsHref: "/whatsapp/listings/cache-creek",
-  },
-  {
-    location: "Dawson Creek, BC",
-    title: "Restaurant in Franchise Hotel",
-    price: "$140,000",
-    mls: "10392063",
-    address: "800 120 Avenue, Dawson Creek, BC V1G 3H7",
-    features: [
-      "In-hotel restaurant location",
-      "Rent ~$4,000/month",
-      "Built-in hotel guest traffic",
-      "Full kitchen setup included",
-      "Established operation",
-    ],
-    value: "Dawson Creek Restaurant ($140K)",
-    detailsHref: "/whatsapp/listings/dawson-creek",
-  },
-  {
-    location: "Merritt, BC",
-    title: "14-Unit Motel with Owner Residence",
-    price: "$1,800,000",
-    mls: "10396244",
-    features: [
-      "14-unit motel + 3-bed owner/manager residence",
-      "Turnkey operation — proven income",
-      "Easy highway access & excellent visibility",
-      "Mix of monthly & daily rentals",
-      "0.25 acre freehold land",
-    ],
-    value: "Merritt Motel ($1.8M)",
-    detailsHref: "/whatsapp/listings/merritt-motel",
-  },
-  {
-    location: "Commercial Drive, Vancouver, BC",
-    title: "Turnkey Vape Store for Sale",
-    price: "$150,000",
-    mls: "C8078570",
-    features: [
-      "Prime location on \"The Drive\" — heavy foot traffic",
-      "Turnkey, established retail business",
-      "Courier pickup location on-site",
-      "Mobile accessory store inside",
-      "Rent $5,500/month",
-    ],
-    value: "Vape Store - Commercial Drive ($150K)",
-    detailsHref: "/whatsapp/listings/commercial-drive-vape-store",
-  },
-];
 
 const WA_HREF = buildWhatsAppUrl(GENERIC_WHATSAPP_MESSAGE);
 
@@ -117,7 +21,7 @@ export default function ListingsSectionWA() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {LISTINGS.map((listing, i) => (
-          <ListingCardWA key={listing.value} {...listing} index={i} mls={listing.mls} address={listing.address} detailsHref={listing.detailsHref} />
+          <ListingCardWA key={listing.value} {...listing} index={i} mls={listing.mls} address={listing.address} detailsHref={`/whatsapp/listings/${listing.slug}`} />
         ))}
       </div>
 

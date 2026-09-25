@@ -6,6 +6,7 @@ import CountryCodeSelect from "@/components/CountryCodeSelect";
 import { submitToCRM } from "@/lib/submitToCRM";
 import { trackLead, trackContact, trackCompleteRegistration } from "@/lib/fbpixel";
 import { trackGoogleAdsConversion, trackFormSubmitConversion } from "@/lib/googleAds";
+import { LISTINGS } from "@/lib/listings";
 
 const OPEN_DELAY_MS = 2000;
 const BOOKING_URL = "https://superadmin.goeasyai.ca/v3/realtorcj/consultation";
@@ -17,12 +18,7 @@ type ContactFormParams = {
 };
 
 export const PROPERTIES = [
-  "Prince George Restaurant ($650K)",
-  "McBride Restaurant ($180K)",
-  "Cache Creek Restaurant ($120K)",
-  "Dawson Creek Restaurant ($140K)",
-  "Merritt Motel ($1.8M)",
-  "Vape Store - Commercial Drive ($150K)",
+  ...LISTINGS.map((l) => l.value),
   "Hotels",
   "Restaurants in Other Area in BC",
   "Restaurants in Lower Mainland BC",
@@ -90,7 +86,17 @@ function FieldError({ msg }: { msg?: string }) {
 
 type FormErrors = Partial<Record<keyof ContactFormParams | "privacy", string>>;
 
-export default function RequestInfoForm({ defaultProperty }: { defaultProperty?: string }) {
+interface RequestInfoFormProps {
+  defaultProperty?: string;
+  /** Overrides the "Request Information" section heading. */
+  heading?: string;
+  /** Hides CJ Kalra's name/phone/email (used on co-op listings from other agents). */
+  hideAgentContact?: boolean;
+  /** Listing slug sent as the Meta Pixel Lead content_name. */
+  leadContentName?: string;
+}
+
+export default function RequestInfoForm({ defaultProperty, heading, hideAgentContact, leadContentName }: RequestInfoFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   // Holds the tab opened synchronously on submit (before the CRM await breaks the
   // user-gesture chain), so we can navigate it later instead of re-opening one.
@@ -217,7 +223,7 @@ export default function RequestInfoForm({ defaultProperty }: { defaultProperty?:
     setSubmitting(false);
     if (ok) {
       setSubmitted(true);
-      trackLead();
+      trackLead(leadContentName);
       trackGoogleAdsConversion();
     } else {
       setSubmitFailed(true);
@@ -251,7 +257,7 @@ export default function RequestInfoForm({ defaultProperty }: { defaultProperty?:
           </p>
           <div className="w-12 h-px mx-auto mb-5" style={{ background: "#C9A84C" }} />
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: "var(--font-playfair)" }}>
-            Request Information
+            {heading ?? "Request Information"}
           </h2>
           <p className="max-w-2xl mx-auto text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
             All inquiries are fully confidential. An NDA will be required before full details are shared, asset sold as-is, or can be taken before we proceed.
@@ -287,6 +293,7 @@ export default function RequestInfoForm({ defaultProperty }: { defaultProperty?:
             ))}
 
             {/* Prefer to call box */}
+            {!hideAgentContact && (
             <div
               className="rounded-lg p-5 mt-2"
               style={{ background: "#0d1f3c", border: "1px solid rgba(201,168,76,0.35)" }}
@@ -305,6 +312,7 @@ export default function RequestInfoForm({ defaultProperty }: { defaultProperty?:
                 cj.kalra@century21.ca
               </a>
             </div>
+            )}
           </div>
 
           {/* ── Right column — form / success ── */}
@@ -329,7 +337,9 @@ export default function RequestInfoForm({ defaultProperty }: { defaultProperty?:
                   Thank You!
                 </h3>
                 <p className="text-sm leading-relaxed max-w-sm" style={{ color: "#e8dfc8" }}>
-                  We have received your inquiry. CJ Kalra will be in touch within 1 business day.
+                  {hideAgentContact
+                    ? "We have received your inquiry. We will be in touch within 1 business day."
+                    : "We have received your inquiry. CJ Kalra will be in touch within 1 business day."}
                 </p>
                 {showFallback && (
                   <a
@@ -566,12 +576,14 @@ export default function RequestInfoForm({ defaultProperty }: { defaultProperty?:
 
               {submitFailed && (
                 <p className="text-xs text-center text-red-400">
-                  Something went wrong sending your request. Please try again or call us at 778-896-9552.
+                  {hideAgentContact
+                    ? "Something went wrong sending your request. Please try again."
+                    : "Something went wrong sending your request. Please try again or call us at 778-896-9552."}
                 </p>
               )}
 
               <p className="text-xs text-center leading-relaxed" style={{ color: "#94a3b8" }}>
-                By submitting you agree to receive communications from CJ Kalra, Century 21 Coastal Realty Ltd.
+                By submitting you agree to receive communications from {hideAgentContact ? "" : "CJ Kalra, "}Century 21 Coastal Realty Ltd.
                 All information is kept strictly confidential and protected by NDA.
               </p>
             </form>

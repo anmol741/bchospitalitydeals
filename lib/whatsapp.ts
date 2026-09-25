@@ -26,3 +26,10 @@ export function trackWhatsAppLead() {
   trackLead();
   trackGoogleAdsConversion();
 }
+
+/** Same as trackWhatsAppLead, but tags the Lead with the listing slug as content_name. */
+export function trackListingWhatsAppLead(contentName: string) {
+  trackContact("WhatsApp");
+  trackLead(contentName);
+  trackGoogleAdsConversion();
+}

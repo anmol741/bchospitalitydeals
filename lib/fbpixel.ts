@@ -8,9 +8,16 @@ function fbq(...args: unknown[]) {
   }
 }
 
-/** Fires on a successful "Request Information" form submission. */
-export function trackLead() {
-  fbq("track", "Lead");
+/**
+ * Fires on a successful "Request Information" form submission. Pass the
+ * listing slug as contentName to tag the Lead with content_name.
+ */
+export function trackLead(contentName?: string) {
+  if (contentName) {
+    fbq("track", "Lead", { content_name: contentName });
+  } else {
+    fbq("track", "Lead");
+  }
 }
 
 /** Fires when a visitor initiates phone/WhatsApp contact. */

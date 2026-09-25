@@ -4,7 +4,7 @@ import Link from "next/link";
 import NavbarWA from "@/components/whatsapp/NavbarWA";
 import FooterWA from "@/components/whatsapp/FooterWA";
 import { trackContact, trackSchedule } from "@/lib/fbpixel";
-import { buildWhatsAppUrl, listingWhatsAppMessage, trackWhatsAppLead } from "@/lib/whatsapp";
+import { buildWhatsAppUrl, listingWhatsAppMessage, trackListingWhatsAppLead, trackWhatsAppLead } from "@/lib/whatsapp";
 
 interface DetailRow {
   label: string;
@@ -15,14 +15,25 @@ export interface ListingDetailWAData {
   location: string;
   name: string;
   price: string;
-  mls: string;
-  sizeLabel: string;
+  mls?: string;
+  sizeLabel?: string;
   /** Short listing name used to build the WhatsApp message (matches the homepage card title). */
   title: string;
   highlights: string[];
   about: string;
   leaseDetails: DetailRow[];
   businessInfo: DetailRow[];
+  /** Real-estate board shown after the MLS® number. */
+  board?: string;
+  /** When set (co-op listings), replaces the CJ Kalra + BC PNP cards with this brokerage. */
+  listingBrokerage?: string;
+  confidentialityNote?: string;
+  /** Overrides the default footer disclaimer. */
+  disclaimer?: string;
+  /** Public path of an illustrative hero image; omitted when no image file exists. */
+  image?: string;
+  /** Listing slug sent as the Meta Pixel Lead content_name. */
+  pixelContentName?: string;
 }
 
 function DetailTable({ title, rows }: { title: string; rows: DetailRow[] }) {
@@ -117,11 +128,26 @@ export default function ListingDetailWA({ data }: { data: ListingDetailWAData })
             >
               {data.price}
             </span>
-            <span className="text-sm" style={{ color: "#94a3b8" }}>
-              <span style={{ color: "#C9A84C", fontWeight: 600 }}>MLS®</span> {data.mls}
-            </span>
-            <span className="text-sm" style={{ color: "#94a3b8" }}>{data.sizeLabel}</span>
+            {data.mls && (
+              <span className="text-sm" style={{ color: "#94a3b8" }}>
+                <span style={{ color: "#C9A84C", fontWeight: 600 }}>MLS®</span> {data.mls}
+                {data.board && <> · {data.board}</>}
+              </span>
+            )}
+            {data.sizeLabel && (
+              <span className="text-sm" style={{ color: "#94a3b8" }}>{data.sizeLabel}</span>
+            )}
           </div>
+
+          {data.image && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={data.image}
+              alt={`${data.name} — illustrative image`}
+              className="w-full h-64 md:h-96 object-cover rounded-xl mb-12"
+              style={{ border: "1px solid rgba(201,168,76,0.2)" }}
+            />
+          )}
 
           {/* Two column layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -163,6 +189,15 @@ export default function ListingDetailWA({ data }: { data: ListingDetailWAData })
                 <p className="text-sm leading-relaxed" style={{ color: "#e8dfc8" }}>
                   {data.about}
                 </p>
+                {data.confidentialityNote && (
+                  <p
+                    className="text-sm leading-relaxed mt-4 rounded-lg p-4"
+                    style={{ color: "#e8dfc8", background: "#0d1f3c", borderLeft: "3px solid #C9A84C" }}
+                  >
+                    <span style={{ color: "#C9A84C", fontWeight: 600 }}>Confidential: </span>
+                    {data.confidentialityNote}
+                  </p>
+                )}
               </div>
 
               <DetailTable title="Lease & Financial Details" rows={data.leaseDetails} />
@@ -185,7 +220,7 @@ export default function ListingDetailWA({ data }: { data: ListingDetailWAData })
                       href={waHref}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={trackWhatsAppLead}
+                      onClick={data.pixelContentName ? () => trackListingWhatsAppLead(data.pixelContentName!) : trackWhatsAppLead}
                       className="w-full text-center px-4 py-3 bg-[#C9A84C] hover:bg-[#E5C97A] text-[#0D0D0D] font-semibold rounded text-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
                     >
                        whatsapp Us
@@ -202,6 +237,18 @@ export default function ListingDetailWA({ data }: { data: ListingDetailWAData })
                   </div>
                 </div>
 
+                {data.listingBrokerage ? (
+                  <div
+                    className="rounded-xl p-6 text-center"
+                    style={{ background: "#0d1f3c", border: "1px solid rgba(201,168,76,0.2)" }}
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#C9A84C" }}>
+                      Listing Brokerage
+                    </p>
+                    <p className="text-sm" style={{ color: "#e8dfc8" }}>{data.listingBrokerage}</p>
+                  </div>
+                ) : (
+                <>
                 {/* CJ Kalra card */}
                 <div
                   className="rounded-xl p-6 text-center"
@@ -263,13 +310,15 @@ export default function ListingDetailWA({ data }: { data: ListingDetailWAData })
                     CJ Kalra is both a licensed Realtor AND RCIC (R708868).
                   </p>
                 </div>
+                </>
+                )}
               </div>
             </div>
           </div>
 
           {/* Footer disclaimer */}
           <p className="text-center mt-16 pt-8" style={{ color: "#6b7280", fontSize: "11px", lineHeight: "1.6", borderTop: "1px solid rgba(201,168,76,0.15)" }}>
-            Do not disturb business operations. All information subject to verification.
+            {data.disclaimer ?? "Do not disturb business operations. All information subject to verification."}
           </p>
         </div>
       </main>
