@@ -9,6 +9,7 @@ interface CountryEntry {
   country: string;  // display name, e.g. "Canada"
 }
 
+
 const COUNTRY_CODES: CountryEntry[] = [
   { flag: "🇨🇦", label: "+1",    country: "Canada" },
   { flag: "🇮🇳", label: "+91",   country: "India" },
