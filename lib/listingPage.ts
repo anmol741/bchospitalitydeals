@@ -4,11 +4,16 @@ import { existsSync } from "fs";
 import path from "path";
 import type { Metadata } from "next";
 import { NEW_LISTING_DETAILS } from "@/lib/newListingDetails";
+import { isListingExclusive } from "@/lib/listings";
 
 export const SITE_URL = "https://bchospitalitydeals.com";
 
-/** Returns /listings/<slug>.png only if the file is actually in /public, so pages never show a broken image. */
+/**
+ * Returns /listings/<slug>.png only if the file is actually in /public, so pages never show a broken image.
+ * Exclusive listings never get a photo, even if a file with a matching name is added later.
+ */
 export function listingImage(slug: string): string | undefined {
+  if (isListingExclusive(slug)) return undefined;
   const rel = `/listings/${slug}.png`;
   return existsSync(path.join(process.cwd(), "public", rel)) ? rel : undefined;
 }
@@ -21,6 +26,7 @@ export function listingMetadata(slug: string, routePrefix: string): Metadata {
     title: content.seoTitle,
     description: content.seoDescription,
     alternates: { canonical: `${SITE_URL}/listings/${slug}` },
+    ...(isListingExclusive(slug) ? { robots: { index: false, follow: false } } : {}),
     openGraph: {
       title: content.seoTitle,
       description: content.seoDescription,

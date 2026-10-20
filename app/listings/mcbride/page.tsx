@@ -1,4 +1,5 @@
 import ListingDetail, { ListingDetailData } from "@/components/ListingDetail";
+import { propertyOptions } from "@/lib/listings";
 
 export const dynamic = 'force-static';
 
@@ -34,5 +35,5 @@ const data: ListingDetailData = {
 };
 
 export default function McBrideListingPage() {
-  return <ListingDetail data={data} />;
+  return <ListingDetail data={data} propertyOptions={propertyOptions()} />;
 }

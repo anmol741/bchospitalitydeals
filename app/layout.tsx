@@ -4,6 +4,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import UtmCapture from "@/components/UtmCapture";
 
 const META_PIXEL_ID = "1199839202332605";
 
@@ -108,6 +109,7 @@ export default function RootLayout({
         </noscript>
         {children}
         <FloatingWhatsApp />
+        <UtmCapture />
       </body>
     </html>
   );

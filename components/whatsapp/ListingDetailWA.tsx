@@ -34,7 +34,17 @@ export interface ListingDetailWAData {
   image?: string;
   /** Listing slug sent as the Meta Pixel Lead content_name. */
   pixelContentName?: string;
+  /** Masked off-market listing: shows `badge`, Book-a-call links, and no NDA requirement. */
+  exclusive?: boolean;
+  badge?: string;
+  /** Shown under the price, e.g. "Share sale". */
+  priceNote?: string;
 }
+
+const BOOK_CALL_LINKS = [
+  { label: "Phone Call", href: "https://cal.com/cj-kalra/phone-call" },
+  { label: "Zoom", href: "https://cal.com/cj-kalra/zoom" },
+];
 
 function DetailTable({ title, rows }: { title: string; rows: DetailRow[] }) {
   return (
@@ -108,10 +118,16 @@ export default function ListingDetailWA({ data }: { data: ListingDetailWAData })
               </svg>
               {data.location}
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-500/10 border border-green-500/30 rounded-full text-green-400 text-[10px] font-medium uppercase tracking-wider">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              Active Listing
-            </span>
+            {data.exclusive && data.badge ? (
+              <span className="inline-flex items-center px-2 py-0.5 bg-[#C9A84C]/15 border border-[#C9A84C]/50 rounded-full text-[#E5C97A] text-[10px] font-medium uppercase tracking-wider">
+                {data.badge}
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-500/10 border border-green-500/30 rounded-full text-green-400 text-[10px] font-medium uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                Active Listing
+              </span>
+            )}
           </div>
 
           {/* Hero */}
@@ -128,6 +144,9 @@ export default function ListingDetailWA({ data }: { data: ListingDetailWAData })
             >
               {data.price}
             </span>
+            {data.priceNote && (
+              <span className="text-sm" style={{ color: "#e8dfc8" }}>{data.priceNote}</span>
+            )}
             {data.mls && (
               <span className="text-sm" style={{ color: "#94a3b8" }}>
                 <span style={{ color: "#C9A84C", fontWeight: 600 }}>MLS®</span> {data.mls}
@@ -225,15 +244,35 @@ export default function ListingDetailWA({ data }: { data: ListingDetailWAData })
                     >
                        whatsapp Us
                     </a>
-                    <a
-                      href="https://superadmin.goeasyai.ca/v3/realtorcj/consultation"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => trackSchedule()}
-                      className="w-full text-center px-4 py-3 border border-[#C9A84C]/50 text-[#C9A84C] hover:bg-[#C9A84C]/10 font-semibold rounded text-sm transition-all duration-200 hover:border-[#C9A84C]"
-                    >
-                      Book Consultation
-                    </a>
+                    {data.exclusive ? (
+                      <div>
+                        <p className="text-xs text-center mb-2" style={{ color: "#94a3b8" }}>Book a call</p>
+                        <div className="flex gap-2">
+                          {BOOK_CALL_LINKS.map(({ label, href }) => (
+                            <a
+                              key={href}
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => trackSchedule()}
+                              className="flex-1 text-center px-3 py-3 border border-[#C9A84C]/50 text-[#C9A84C] hover:bg-[#C9A84C]/10 font-semibold rounded text-sm transition-all duration-200 hover:border-[#C9A84C]"
+                            >
+                              {label}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <a
+                        href="https://superadmin.goeasyai.ca/v3/realtorcj/consultation"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => trackSchedule()}
+                        className="w-full text-center px-4 py-3 border border-[#C9A84C]/50 text-[#C9A84C] hover:bg-[#C9A84C]/10 font-semibold rounded text-sm transition-all duration-200 hover:border-[#C9A84C]"
+                      >
+                        Book Consultation
+                      </a>
+                    )}
                   </div>
                 </div>
 

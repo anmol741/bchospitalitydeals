@@ -6,7 +6,8 @@ import CountryCodeSelect from "@/components/CountryCodeSelect";
 import { submitToCRM } from "@/lib/submitToCRM";
 import { trackLead, trackContact, trackCompleteRegistration } from "@/lib/fbpixel";
 import { trackGoogleAdsConversion, trackFormSubmitConversion } from "@/lib/googleAds";
-import { LISTINGS } from "@/lib/listings";
+import type { PropertyOption } from "@/lib/listings";
+import { getUtm } from "@/lib/utm";
 
 const OPEN_DELAY_MS = 2000;
 const BOOKING_URL = "https://superadmin.goeasyai.ca/v3/realtorcj/consultation";
@@ -16,14 +17,6 @@ type ContactFormParams = {
   property: string; buyerProfile: string; budget: string;
   timeline: string; ndaComfort: string; details: string;
 };
-
-export const PROPERTIES = [
-  ...LISTINGS.map((l) => l.value),
-  "Hotels",
-  "Restaurants in Other Area in BC",
-  "Restaurants in Lower Mainland BC",
-  "Other Business",
-];
 
 const BUYER_PROFILES = [
   "First-Time Buyer",
@@ -94,9 +87,14 @@ interface RequestInfoFormProps {
   hideAgentContact?: boolean;
   /** Listing slug sent as the Meta Pixel Lead content_name. */
   leadContentName?: string;
+  /** Hides the NDA question and NDA wording (used on exclusive listings). */
+  hideNda?: boolean;
+  /** "Which property" dropdown, built server-side by propertyOptions() in lib/listings. */
+  propertyOptions: PropertyOption[];
 }
 
-export default function RequestInfoForm({ defaultProperty, heading, hideAgentContact, leadContentName }: RequestInfoFormProps) {
+export default function RequestInfoForm({ defaultProperty, heading, hideAgentContact, leadContentName, hideNda, propertyOptions }: RequestInfoFormProps) {
+
   const formRef = useRef<HTMLFormElement>(null);
   // Holds the tab opened synchronously on submit (before the CRM await breaks the
   // user-gesture chain), so we can navigate it later instead of re-opening one.
@@ -168,7 +166,7 @@ export default function RequestInfoForm({ defaultProperty, heading, hideAgentCon
     if (!fd.buyerProfile) e.buyerProfile = "Please select your buyer profile.";
     if (!fd.budget) e.budget = "Please select your purchase budget.";
     if (!fd.timeline) e.timeline = "Please select your buying timeline.";
-    if (!fd.ndaComfort) e.ndaComfort = "Please select an option.";
+    if (!hideNda && !fd.ndaComfort) e.ndaComfort = "Please select an option.";
     if (!privacyChecked) e.privacy = "You must agree to the Privacy Policy.";
     return e;
   };
@@ -206,6 +204,9 @@ export default function RequestInfoForm({ defaultProperty, heading, hideAgentCon
       bookingTabRef.current.opener = null;
     }
 
+    const listing = propertyOptions.find((o) => o.value === fd.property);
+    const listingSlug = listing?.slug ?? leadContentName ?? "";
+
     setSubmitting(true);
     setSubmitFailed(false);
     const ok = await submitToCRM({
@@ -219,12 +220,20 @@ export default function RequestInfoForm({ defaultProperty, heading, hideAgentCon
       'when_ar_jlvatx': fd.timeline,
       'are_you_qnylji': fd.ndaComfort,
       'additio_ewnbhy': fd.details,
+      listing_title: listing?.title ?? "",
+      listing_slug: listingSlug,
+      tags: (listing?.tags ?? ["BC Hospitality Deals"]).join(", "),
+      consent: "Agreed to Privacy Policy",
+      page_url: window.location.href,
+      ...getUtm(),
+      submitted_at: new Date().toISOString(),
     });
     setSubmitting(false);
     if (ok) {
       setSubmitted(true);
-      trackLead(leadContentName);
-      trackGoogleAdsConversion();
+      const leadSlug = leadContentName ?? listing?.pixelContentName;
+      trackLead(leadSlug);
+      trackGoogleAdsConversion(leadSlug);
     } else {
       setSubmitFailed(true);
       bookingTabRef.current?.close();
@@ -260,7 +269,9 @@ export default function RequestInfoForm({ defaultProperty, heading, hideAgentCon
             {heading ?? "Request Information"}
           </h2>
           <p className="max-w-2xl mx-auto text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
-            All inquiries are fully confidential. An NDA will be required before full details are shared, asset sold as-is, or can be taken before we proceed.
+            {hideNda
+              ? "All inquiries are fully confidential."
+              : "All inquiries are fully confidential. An NDA will be required before full details are shared, asset sold as-is, or can be taken before we proceed."}
           </p>
         </div>
 
@@ -274,7 +285,7 @@ export default function RequestInfoForm({ defaultProperty, heading, hideAgentCon
               { icon: "⏰", title: "Response Within 1 Business Day", desc: "A qualified specialist will follow up promptly to discuss your requirements." },
               { icon: "📋", title: "NDA at No Cost", desc: "A Confidentiality Agreement is provided electronically at no cost to the buyer." },
               { icon: "🔍", title: "Off-Market Access Available", desc: "Additional hotel and motel restaurant opportunities available through our professional network." },
-            ].map((card) => (
+            ].filter((card) => !(hideNda && card.title === "NDA at No Cost")).map((card) => (
               <div
                 key={card.title}
                 className="flex items-start gap-4 rounded-lg p-5"
@@ -354,6 +365,7 @@ export default function RequestInfoForm({ defaultProperty, heading, hideAgentCon
               </div>
             ) : (
             <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-6">
+              {leadContentName && <input type="hidden" name="listing_slug" value={leadContentName} />}
 
               {/* Full Name */}
               <div id="field-name">
@@ -422,7 +434,7 @@ export default function RequestInfoForm({ defaultProperty, heading, hideAgentCon
                 <div className="relative">
                   <select value={fd.property} onChange={(e) => set("property", e.target.value)} className={selectClass("property")} style={INPUT_BG}>
                     <option value="" disabled>Select a property…</option>
-                    {PROPERTIES.map((p) => <option key={p}>{p}</option>)}
+                    {propertyOptions.map((p) => <option key={p.value}>{p.value}</option>)}
                   </select>
                   <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#C9A84C]/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                 </div>
@@ -487,6 +499,7 @@ export default function RequestInfoForm({ defaultProperty, heading, hideAgentCon
               </div>
 
               {/* NDA Comfort */}
+              {!hideNda && (
               <div id="field-ndaComfort">
                 <label className="block text-sm font-medium mb-1" style={{ color: "#e8dfc8" }}>
                   Are you comfortable signing an NDA before receiving private financials? <span className="text-[#C9A84C]">*</span>
@@ -514,6 +527,7 @@ export default function RequestInfoForm({ defaultProperty, heading, hideAgentCon
                 </div>
                 <FieldError msg={errors.ndaComfort} />
               </div>
+              )}
 
               {/* Additional Details */}
               <div>
@@ -584,7 +598,7 @@ export default function RequestInfoForm({ defaultProperty, heading, hideAgentCon
 
               <p className="text-xs text-center leading-relaxed" style={{ color: "#94a3b8" }}>
                 By submitting you agree to receive communications from {hideAgentContact ? "" : "CJ Kalra, "}Century 21 Coastal Realty Ltd.
-                All information is kept strictly confidential and protected by NDA.
+                All information is kept strictly confidential{hideNda ? "." : " and protected by NDA."}
               </p>
             </form>
             )}

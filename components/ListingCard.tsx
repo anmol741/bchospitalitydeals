@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { EXCLUSIVE_FOOTNOTE } from "@/lib/listings";
 
 interface ListingCardProps {
   location: string;
@@ -11,6 +12,10 @@ interface ListingCardProps {
   badge?: string;
   mls?: string;
   address?: string;
+  /** Masked off-market listing: shows `badge` and a "details on request" label instead of the NDA label. */
+  exclusive?: boolean;
+  priceNote?: string;
+  category?: string;
   index?: number;
   onRequestInfo?: () => void;
   detailsHref?: string;
@@ -28,6 +33,9 @@ export default function ListingCard({
   badge,
   mls,
   address,
+  exclusive,
+  priceNote,
+  category,
   index = 0,
   onRequestInfo,
   detailsHref,
@@ -84,11 +92,21 @@ export default function ListingCard({
               {location}
             </span>
           )}
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-500/10 border border-green-500/30 rounded-full text-green-400 text-[10px] font-medium uppercase tracking-wider">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-            Active Listing
-          </span>
+          {exclusive && badge ? (
+            <span className="inline-flex items-center px-2 py-0.5 bg-[#C9A84C]/15 border border-[#C9A84C]/50 rounded-full text-[#E5C97A] text-[10px] font-medium uppercase tracking-wider">
+              {badge}
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-500/10 border border-green-500/30 rounded-full text-green-400 text-[10px] font-medium uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              Active Listing
+            </span>
+          )}
         </div>
+
+        {category && (
+          <p className="text-[11px] uppercase tracking-widest mb-1" style={{ color: "#94a3b8" }}>{category}</p>
+        )}
 
         {/* Title */}
         {detailsHref ? (
@@ -115,6 +133,9 @@ export default function ListingCard({
         >
           {price}
         </div>
+        {priceNote && (
+          <p className="text-xs mb-3" style={{ color: "#94a3b8" }}>{priceNote}</p>
+        )}
 
         {/* MLS + Address */}
         {(mls || address) && (
@@ -152,6 +173,11 @@ export default function ListingCard({
             </li>
           ))}
         </ul>
+        {exclusive && (
+          <p className="-mt-3 mb-5" style={{ color: "#6b7280", fontSize: "11px", lineHeight: "1.5" }}>
+            {EXCLUSIVE_FOOTNOTE}
+          </p>
+        )}
 
         {/* Actions */}
         <div className="flex gap-3 mt-auto">
@@ -198,7 +224,7 @@ export default function ListingCard({
           />
         </svg>
         <span className="text-white/30 text-[10px] uppercase tracking-widest font-medium">
-          NDA Required · Confidential Listing
+          {exclusive ? "Confidential listing · details on request" : "NDA Required · Confidential Listing"}
         </span>
       </div>
     </motion.div>

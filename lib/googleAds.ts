@@ -3,13 +3,15 @@
 // gtag.js a second time. In GTM, add a Google Ads Conversion Tracking tag
 // (Conversion ID AW-18084530712, Label gOXQCMvui9EcEJiUsK9D) triggered on the
 // "generate_lead_conversion" custom event.
-export function trackGoogleAdsConversion() {
+// Pass the listing slug to expose it to GTM as the `listing_slug` dataLayer variable.
+export function trackGoogleAdsConversion(listingSlug?: string) {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
     event: "generate_lead_conversion",
     value: 1.0,
     currency: "CAD",
+    ...(listingSlug ? { listing_slug: listingSlug } : {}),
   });
 }
 
