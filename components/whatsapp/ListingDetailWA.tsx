@@ -37,6 +37,8 @@ export interface ListingDetailWAData {
   /** Masked off-market listing: shows `badge`, Book-a-call links, and no NDA requirement. */
   exclusive?: boolean;
   badge?: string;
+  /** Replaces the green "Active Listing" badge. */
+  statusLabel?: string;
   /** Shown under the price, e.g. "Share sale". */
   priceNote?: string;
 }
@@ -47,6 +49,7 @@ const BOOK_CALL_LINKS = [
 ];
 
 function DetailTable({ title, rows }: { title: string; rows: DetailRow[] }) {
+  if (rows.length === 0) return null;
   return (
     <div className="mb-10">
       <h2
@@ -121,6 +124,10 @@ export default function ListingDetailWA({ data }: { data: ListingDetailWAData })
             {data.exclusive && data.badge ? (
               <span className="inline-flex items-center px-2 py-0.5 bg-[#C9A84C]/15 border border-[#C9A84C]/50 rounded-full text-[#E5C97A] text-[10px] font-medium uppercase tracking-wider">
                 {data.badge}
+              </span>
+            ) : data.statusLabel ? (
+              <span className="inline-flex items-center px-2 py-0.5 bg-[#C9A84C]/15 border border-[#C9A84C]/50 rounded-full text-[#E5C97A] text-[10px] font-medium uppercase tracking-wider">
+                {data.statusLabel}
               </span>
             ) : (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-500/10 border border-green-500/30 rounded-full text-green-400 text-[10px] font-medium uppercase tracking-wider">

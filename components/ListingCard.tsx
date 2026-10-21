@@ -14,6 +14,8 @@ interface ListingCardProps {
   address?: string;
   /** Masked off-market listing: shows `badge` and a "details on request" label instead of the NDA label. */
   exclusive?: boolean;
+  /** Replaces the green "Active Listing" badge. */
+  statusLabel?: string;
   priceNote?: string;
   category?: string;
   index?: number;
@@ -34,6 +36,7 @@ export default function ListingCard({
   mls,
   address,
   exclusive,
+  statusLabel,
   priceNote,
   category,
   index = 0,
@@ -95,6 +98,10 @@ export default function ListingCard({
           {exclusive && badge ? (
             <span className="inline-flex items-center px-2 py-0.5 bg-[#C9A84C]/15 border border-[#C9A84C]/50 rounded-full text-[#E5C97A] text-[10px] font-medium uppercase tracking-wider">
               {badge}
+            </span>
+          ) : statusLabel ? (
+            <span className="inline-flex items-center px-2 py-0.5 bg-[#C9A84C]/15 border border-[#C9A84C]/50 rounded-full text-[#E5C97A] text-[10px] font-medium uppercase tracking-wider">
+              {statusLabel}
             </span>
           ) : (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-500/10 border border-green-500/30 rounded-full text-green-400 text-[10px] font-medium uppercase tracking-wider">

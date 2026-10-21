@@ -18,6 +18,8 @@ export interface ListingSummary {
   pixelContentName?: string;
   /** Set to false to hide the listing everywhere (grids, form, sitemap, detail pages). */
   published?: boolean;
+  /** Replaces the green "Active Listing" badge, e.g. "Off-Market Listing". */
+  statusLabel?: string;
   /** Masked off-market listing: noindex, left out of the sitemap, no NDA label on the card. */
   exclusive?: boolean;
   /** Shown under the price, e.g. "Share sale". */
@@ -110,19 +112,15 @@ export const ALL_LISTINGS: ListingSummary[] = [
     value: "Merritt Motel ($1.8M)",
   },
   {
-    slug: "commercial-drive-vape-store",
-    location: "Commercial Drive, Vancouver, BC",
-    title: "Turnkey Vape Store for Sale",
-    price: "$150,000",
-    mls: "C8078570",
+    slug: "vancouver-vape-store",
+    location: "Vancouver, BC",
+    title: "Vape Stores and Convenience Store for Sale",
+    price: "$80,000 – $200,000",
     features: [
-      "Prime location on \"The Drive\" — heavy foot traffic",
       "Turnkey, established retail business",
-      "Courier pickup location on-site",
-      "Mobile accessory store inside",
-      "Rent $5,500/month",
     ],
-    value: "Vape Store - Commercial Drive ($150K)",
+    value: "Vape Stores & Convenience Store - Vancouver ($80K–$200K)",
+    statusLabel: "Off-Market Listing",
   },
   {
     slug: "vancouver-granville-restaurant",
